@@ -1,0 +1,261 @@
+	/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
+*/
+
+
+
+options {
+  IGNORE_CASE = false;
+  STATIC = false;
+}
+
+PARSER_BEGIN(ExprParser)
+
+package uniandes.lym.parserJavaCC.exprParser;
+import java.util.*;
+ 
+
+public class ExprParser
+{
+
+Map<String, Integer> mem = new HashMap<String, Integer>(); //Memory to store variables.  
+
+
+
+private final int asg = 0;
+private final int push = 1;
+private final int plus = 2;
+private final int times = 3;
+private final int div = 4;
+private final int sub = 5;
+private final int wr = 6;
+private final int chs = 7;
+private final int get = 8;
+private final int pop = 9;
+private final int pow = 10;
+
+private final String []  names = {"asg", "push", "plus", "times", "div", "sub", "write", "chs", "get", "pop", "pow"};
+
+
+static MyStack myStack = new MyStack();
+
+ArrayList <Instruction> code = new ArrayList <Instruction> () ;
+
+private class Instruction {
+
+int type;
+Object arg = null;
+
+int index = 1;
+
+public Instruction(int t) {
+  type = t;
+}
+
+public Instruction(int t, Object a) {
+  type = t;
+  arg =  a;
+  
+}
+
+// instrucción para power:
+
+public Instruction(int t, int a, int c) {
+  type = t;
+  index =  a;
+  arg = c;
+  
+}
+
+
+public void execute() throws Error {
+  switch (type) {
+  	case push:   myStack.push(arg) ; break;
+  	case plus:   myStack.plus() ; break;
+	case times:  myStack.times() ; break;
+	case div:   myStack.div() ; break;
+	case sub:   myStack.minus() ; break;
+	case asg:   mem.put((String) arg, myStack.pop()) ; break;
+	case get:  if (mem.get((String) arg)==null)throw new Error("El registro: " + arg + " no tiene valor asignado");
+               else myStack.push(mem.get((String) arg)) ; break;
+	case chs:   myStack.chs() ; break;
+	case wr:    System.out.println("Output: "+ arg +"=" + mem.get(arg)); break;
+	case pop:  myStack.pop() ; break;
+	case pow:  myStack.pow(index) ; break;
+					
+	default:    System.out.println("Unknown instruction "+  type); break;
+}
+}
+
+ 
+public String toString() {
+  if (arg==null)
+	return  "      "+names[type] + "\n";
+  else
+	return  "      "+ names[type] + "  "+  arg + "\n";
+}
+}
+
+
+
+}
+
+PARSER_END(ExprParser)
+
+SKIP :
+{
+  " "
+| "\r" 
+| "\t"
+| "\n"
+}
+
+
+TOKEN :
+{
+  	  < #DIGIT : [ "0"-"9" ] >
+	| < #LETTER : [ "A"-"Z" ] >
+	| < SEMICOLON: ";">
+	| < INT : (< DIGIT >)+ >
+	| < IDREG: "R"( <DIGIT> )> 
+	| < START: "START">
+	| < PRINT: "PRINT">
+	| < PUSH: "PUSH" >
+	| < PUSH_FROM: "PUSH_FROM" >
+	| < POP: "POP" >
+	| < POP_TO: "POP_TO">
+	| < PLUS: "PLUS" >
+	| < MINUS: "MINUS" >
+	| < TIMES: "TIMES" >
+	| < DIV: "DIV" >
+	| < POW: "POW" >
+	| < CHS: "CHS" >
+	| < STOP: "STOP" >
+	| < NAME :  <LETTER > (< LETTER >| < DIGIT >)* >  
+}
+
+void one_line() :
+{}
+{
+    ( <START> <NAME> ins() <STOP> <EOF> {
+        System.out.println("Executing:");
+ 
+        System.out.println(code);
+
+
+		Iterator <Instruction > icode = code.iterator();
+			int n = 0;
+		while (icode.hasNext()) {
+        	Instruction i = icode.next();
+        	//try {
+				
+        	  i.execute();
+				n = n+1;
+				System.out.println(n);
+			  System.out.println("stack: ");
+        	  System.out.println(myStack);
+        	  System.out.println("registros: ");
+        	  System.out.println(mem);
+
+        	  //} catch (Error e) { System.out.println (e); break; }  
+   		
+		}
+        
+         
+       }
+      )
+    
+}
+
+void ins() :
+
+{
+String nombre_registro;
+int entero;
+}
+
+{
+	( <PUSH> entero=num() <SEMICOLON> {code.add(new Instruction(push,entero));}
+		| <PUSH_FROM> nombre_registro=idreg() <SEMICOLON> {code.add(new Instruction(get,nombre_registro));}
+		| <POP> <SEMICOLON> {code.add(new Instruction(pop));}
+		| <POP_TO> nombre_registro=idreg() <SEMICOLON> {code.add(new Instruction(asg,nombre_registro));}
+		| <PLUS> <SEMICOLON> {code.add(new Instruction(plus));}
+		| <MINUS> <SEMICOLON> {code.add(new Instruction(sub));}
+		| <TIMES> <SEMICOLON> {code.add(new Instruction(times));}
+		| <DIV> <SEMICOLON> {code.add(new Instruction(div));}
+		| <POW> entero=num() <SEMICOLON> {code.add(new Instruction(pow,entero, 1));}
+		| <CHS> <SEMICOLON> {code.add(new Instruction(chs));}
+		| <PRINT> nombre_registro=idreg() <SEMICOLON> {code.add(new Instruction(wr,nombre_registro));}
+	)+
+}
+
+int num() throws Error:
+{	
+	int total=-9999;
+	Token token;
+}
+
+
+{
+	(token=<INT>)
+
+	{ 
+		try {
+			total = Integer.valueOf(token.image);
+		} 
+		catch (NumberFormatException ee) 
+		{
+			throw new Error("Number too large: "+token.image);
+		}
+		return total;
+     }
+     
+       
+}
+
+String idreg() throws Error:
+{	
+	Token token;
+}
+
+{
+	(token=<IDREG>)
+	  
+{
+  return token.image;
+}   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
