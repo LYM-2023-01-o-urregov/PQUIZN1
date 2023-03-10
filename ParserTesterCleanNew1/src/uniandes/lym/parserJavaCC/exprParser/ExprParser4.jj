@@ -76,7 +76,7 @@ void ins() :
 		| <POW> <INT> <SEMICOLON>
 		| <CHS> <SEMICOLON>
 		| <PRINT> <IDREG> <SEMICOLON>
-	)*
+	)+
 }
 
 
