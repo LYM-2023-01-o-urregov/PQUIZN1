@@ -1,0 +1,220 @@
+	/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.17+ wizard for JavaCC 1.5.0+
+*/
+
+
+
+options {
+  IGNORE_CASE = false;
+  STATIC = false;
+}
+
+PARSER_BEGIN(ExprParser)
+
+package uniandes.lym.parserJavaCC.exprParser;
+import java.util.*;
+ 
+
+public class ExprParser
+{
+
+Map<String, Integer> mem = new HashMap<String, Integer>(); //Memory to store variables.  
+
+
+
+private final int ASG = 0;
+private final int PUSH = 1;
+private final int PLUS = 2;
+private final int TIMES = 3;
+private final int DIV = 4;
+private final int SUB = 5;
+private final int WR = 6;
+private final int CHS = 7;
+private final int GET = 8;
+
+private final String []  names = {"ASG", "PUSH", "PLUS", "TIMES", "DIV", "SUB", "WRITE", "CHS", "GET"};
+
+
+static MyStack myStack = new MyStack();
+
+ArrayList <Instruction> code = new ArrayList <Instruction> () ;
+
+
+private class Instruction {
+
+int type;
+Object arg = null;
+
+public Instruction(int t) {
+  type = t;
+}
+
+public Instruction(int t, Object a) {
+  type = t;
+  arg =  a;
+  
+}
+
+
+public void execute() throws Error {
+  switch (type) {
+  	case PUSH:   myStack.push(arg) ; break;
+  	case PLUS:   myStack.plus() ; break;
+	case TIMES:  myStack.times() ; break;
+	case DIV:   myStack.div() ; break;
+	case SUB:   myStack.minus() ; break;
+	case ASG:   mem.put((String) arg, myStack.pop()) ; break;
+	case GET:  if (mem.get((String) arg)==null)throw new Error("Undefined variable: "+ arg);
+               else myStack.push(mem.get((String) arg)) ; break;
+	case CHS:   myStack.chs() ; break;
+	case WR:    System.out.println("Output: "+ arg +"=" + mem.get(arg)); break;
+	default:    System.out.println("Unknown instruction "+  type); break;
+}
+}
+
+ 
+public String toString() {
+  if (arg==null)
+	return  "      "+names[type] + "\n";
+  else
+	return  "      "+ names[type] + "  "+  arg + "\n";
+}
+}
+
+
+
+}
+
+PARSER_END(ExprParser)
+
+SKIP :
+{
+  " "
+| "\r" 
+| "\t"
+| "\n"
+}
+
+
+TOKEN :
+{
+	< #DIGIT : [ "0"-"9" ] >
+	| < #LETTER : [ "A"-"Z" ] >
+	| < PUSH: "PUSH" >
+	| < SEMICOLON: ";">
+	| < INT : (<DIGIT>)+ >
+	| < IDREG: "R"( <DIGIT> )> 
+	| < START: "START">
+	| < PRINT: "PRINT">
+	| < PUSH_FROM: "PUSH_FROM" >
+	| < POP: "POP" >
+	| < POP_TO: "POP_TO">
+	| < PLUS: "PLUS" >
+	| < MINUS: "MINUS" >
+	| < TIMES: "TIMES" >
+	| < DIV: "DIV" >
+	| < POW: "POW" >
+	| < CHS: "CHS" >
+	| < STOP: "STOP" >
+	| < NAME :  <LETTER > (< LETTER >| < DIGIT >)* >  
+}
+
+
+void one_line() :
+{}
+{    ( <START> <NAME> ins() <STOP> <EOF>)
+    
+}
+
+void ins() :
+
+{
+String IDREG;
+}
+
+{
+	( <PUSH> num() <SEMICOLON> 
+		| <PUSH_FROM> IDREG=idreg() <SEMICOLON>
+		| <POP> <SEMICOLON>
+		| <POP_TO> IDREG=idreg() <SEMICOLON>
+		| <PLUS> <SEMICOLON>
+		| <MINUS> <SEMICOLON>
+		| <TIMES> <SEMICOLON>
+		| <DIV> <SEMICOLON>
+		| <POW> <INT> <SEMICOLON>
+		| <CHS> <SEMICOLON>
+		| <PRINT> IDREG=idreg() <SEMICOLON>
+	)+
+}
+
+int num() throws Error:
+{	
+	int total=-9999;
+	Token token;
+}
+
+
+{
+	(token=<INT>)
+
+	{ 
+		try {
+			total = Integer.valueOf(token.image);
+		} 
+		catch (NumberFormatException ee) 
+		{
+			throw new Error("Number too large: "+token.image);
+		}
+		return total;
+     }
+     
+       
+}
+
+String idreg() throws Error:
+{	
+	Token token;
+}
+
+{
+	(token=<IDREG>)
+	  
+{
+  return token.image;
+}   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
