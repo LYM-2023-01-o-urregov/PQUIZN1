@@ -1,0 +1,95 @@
+/**
+ * JavaCC file
+ */
+ 
+options {
+  IGNORE_CASE = false;
+  STATIC = false;
+}
+PARSER_BEGIN(ParserProlog)
+package uniandes.lym.parserJavaCC.parserProlog;
+
+
+import java.util.*;
+
+public class ParserProlog {
+
+  
+
+}
+
+
+PARSER_END(ParserProlog)
+
+SKIP :
+{
+ 	" " | "\r" | "\t" | "\n"
+}
+TOKEN : /* OPERATORS */
+{
+    <ARROW: ":-">
+  | < Symbol1: "< >" >
+  
+}
+TOKEN: {
+   <#CH: ~["\""] >//any character except quote
+|  <QUOTED: "\""  ( < CH > )* "\"" >
+}
+
+
+TOKEN :
+{
+    < INT: ( <DIGIT> )+ >
+|   < #DIGIT: "0" | "1" | "2"| "3" | "4" | "5" |  "6" | "7" | "8" |"9" >
+|   < #UPPER: ["A"-"Z"] >
+|   < #LOWER: ["a"-"z"] >
+|   < VAR: ( <UPPER>  ( <UPPER > | < LOWER > | < DIGIT > )* )>
+|   < ATOM: ( <LOWER>  ( <UPPER > | < LOWER > | < DIGIT >)* )>
+}
+
+
+
+void hr():
+{}
+{
+  
+  functor() [< ARROW>  functor() (","  functor())*] "."
+
+
+	}
+
+
+void functor(): 
+{}
+{
+(
+  	< ATOM > ("(" arg() (","  arg())* ")")?
+)
+	
+}
+void arg():
+{}
+{
+  < INT > | functor() | list() | < VAR > | < QUOTED >
+}
+
+void list() :
+{}
+
+{
+
+"[" (arg() (","  arg())* ("|" arg())?)? "]"}
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
