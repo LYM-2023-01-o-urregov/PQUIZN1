@@ -7,6 +7,6 @@ Para ejecutarlo:
 2. Corra todo el proyecto.
 3. Le aparecerá una visualizador llamado "Probador de parsers"; para probar el parser que modifiqué vaya a la esquina superior izquierda y selecciones Parser > Expressions.
 4. Ingrese un input para probar.
-5. En la consola le aparece el stack y los regsitros en un paso determinado. Las instrucciones print aparecen de la forma Output: Ri=<INT>
+5. En la consola le aparece el stack y los regsitros en un paso determinado. Las instrucciones print aparecen de la forma Output: Ri= \<"INT \>
 
 *Nota*: Modifiqué el archivo mundoParser
