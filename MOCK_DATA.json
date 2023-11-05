@@ -1,4 +1,4 @@
-[{"id":1,"nombre":"Lois","foto":"http://dummyimage.com/126x113.png/cc0000/ffffff","costoAdicional":false,"viviendaAsociada":{}},
+[{"id":1,"nombre":"Lois","foto":"https://upload.wikimedia.org/wikipedia/commons/e/e8/Santander_-_laundry.jpg","costoAdicional":false,"viviendaAsociada":{}},
 {"id":2,"nombre":"Granny","foto":"http://dummyimage.com/221x271.png/5fa2dd/ffffff","costoAdicional":false,"viviendaAsociada":{}},
 {"id":3,"nombre":"Mickie","foto":"http://dummyimage.com/232x122.png/5fa2dd/ffffff","costoAdicional":false,"viviendaAsociada":{}},
 {"id":4,"nombre":"Alverta","foto":"http://dummyimage.com/262x228.png/cc0000/ffffff","costoAdicional":true,"viviendaAsociada":{}},
