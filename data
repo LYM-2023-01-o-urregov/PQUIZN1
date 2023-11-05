@@ -1,0 +1,10 @@
+[{"id":1,"nombre":"Lois1","foto":"https://upload.wikimedia.org/wikipedia/commons/e/e8/Santander_-_laundry.jpg","costoAdicional":false,"viviendaAsociada":{}},
+{"id":2,"nombre":"Granny","foto":"http://dummyimage.com/221x271.png/5fa2dd/ffffff","costoAdicional":false,"viviendaAsociada":{}},
+{"id":3,"nombre":"Mickie","foto":"http://dummyimage.com/232x122.png/5fa2dd/ffffff","costoAdicional":false,"viviendaAsociada":{}},
+{"id":4,"nombre":"Alverta","foto":"http://dummyimage.com/262x228.png/cc0000/ffffff","costoAdicional":true,"viviendaAsociada":{}},
+{"id":5,"nombre":"Orren","foto":"http://dummyimage.com/251x147.png/5fa2dd/ffffff","costoAdicional":true,"viviendaAsociada":{}},
+{"id":6,"nombre":"Ninetta","foto":"http://dummyimage.com/183x277.png/ff4444/ffffff","costoAdicional":true,"viviendaAsociada":{}},
+{"id":7,"nombre":"Darby","foto":"http://dummyimage.com/268x271.png/cc0000/ffffff","costoAdicional":true,"viviendaAsociada":{}},
+{"id":8,"nombre":"Holmes","foto":"http://dummyimage.com/265x225.png/cc0000/ffffff","costoAdicional":true,"viviendaAsociada":{}},
+{"id":9,"nombre":"Christine","foto":"http://dummyimage.com/213x130.png/5fa2dd/ffffff","costoAdicional":false,"viviendaAsociada":{}},
+{"id":10,"nombre":"Heloise","foto":"http://dummyimage.com/269x221.png/dddddd/000000","costoAdicional":false,"viviendaAsociada":{}}]
